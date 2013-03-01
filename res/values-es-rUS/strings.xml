@@ -97,7 +97,7 @@
     <string name="has_invalid_recipient" msgid="1485388396900997383">"Destinatario(s) no válido(s): &lt;<xliff:g id="NAME">%1$s</xliff:g>&gt;"</string>
     <string name="invalid_destination" msgid="4573835601024786416">"Dirección de destino no válida"</string>
     <string name="service_not_activated" msgid="9178218144019626176">"No se activó el servicio en la red."</string>
-    <string name="service_message_not_found" msgid="1908877102600048515">"El mensaje ha caducado o no está disponible."</string>
+    <string name="service_message_not_found" msgid="1908877102600048515">"Mensaje expirado o no disponible."</string>
     <string name="service_network_problem" msgid="4583269174855943025">"No se pudo enviar debido a un problema de la red."</string>
     <string name="invalid_recipient_message" msgid="6465343105010999068">"Corrige los destinatarios o no recibirán el mensaje."</string>
     <string name="cannot_send_message" msgid="3414307479833622644">"No se puede enviar el mensaje."</string>
@@ -161,7 +161,7 @@
     <string name="pref_summary_sms_delivery_reports" msgid="5852207702358546129">"Solicita un informe de entrega para cada mensaje que envías"</string>
     <string name="pref_summary_auto_delete" msgid="7719538116486177613">"Eliminar los mensajes antiguos al alcanzar la cantidad máxima"</string>
     <string name="pref_summary_delete_limit" msgid="597128041393045216">"<xliff:g id="COUNT">%1$s</xliff:g> mensajes por conversación"</string>
-    <string name="pref_title_manage_sim_messages" msgid="7820895261757881177">"Admin. mensajes de tarj. SIM"</string>
+    <string name="pref_title_manage_sim_messages" msgid="7820895261757881177">"Administrar mensajes de tarjeta SIM"</string>
     <string name="pref_title_mms_delivery_reports" msgid="6666857926679451910">"Informes de entrega"</string>
     <string name="pref_title_mms_read_reports" msgid="4882179829495828541">"Informes leídos"</string>
     <string name="pref_title_sms_delivery_reports" msgid="876064208254451038">"Informes de entrega"</string>
@@ -255,7 +255,7 @@
     <string name="notification_multiple" msgid="7684007285202109490">"<xliff:g id="COUNT">%s</xliff:g> mensajes no leídos."</string>
     <string name="notification_multiple_title" msgid="332602028959557541">"Mensajes nuevos"</string>
     <string name="notification_failed_multiple" msgid="6192531993698497229">"<xliff:g id="COUNT">%s</xliff:g> mensajes no pudieron enviarse."</string>
-    <string name="notification_failed_multiple_title" msgid="1112032024904397126">"Mensajes no enviados"</string>
+    <string name="notification_failed_multiple_title" msgid="1112032024904397126">"Mensajes no enviadas"</string>
     <string name="sim_full_title" msgid="1809829051697702810">"Tarjeta SIM completa"</string>
     <string name="sim_full_body" msgid="6241664980790322925">"Elimina algunos mensajes para hacer más espacio."</string>
     <string name="sms_full_title" msgid="6041287140125011854">"Memoria completa de mensaje de texto"</string>
@@ -343,4 +343,98 @@
     <string name="attachment_picture" msgid="3709286281567284296">"Imagen"</string>
     <string name="notification_separator" msgid="2334673105226536422">"  "</string>
     <string name="enumeration_comma" msgid="213598026698964628">", "</string>
+    <string name="subscription1_title" >Suscripción 1</string>
+    <string name="pending_mms" >Mensaje: Una o más MMS están pendientes</string>
+    <string name="eo_disable" >Oportunidad de Empleo desactivado</string>
+    <string name="restaurants_enable" >Restaurantes habilitado</string>
+    <string name="enable_disable_lodgings" >Alojamiento</string>
+    <string name="enable_disable_mhh" >Medicina, salud y el Hospital</string>
+    <string name="pending_mms_title" >En espera de MMS en otra suscripción.</string>
+    <string name="abort_mms" >Mensaje: Abortar MMS</string>
+    <string name="enable_disable_international" >Internacional</string>
+    <string name="enable_disable_eo" >Oportunidad de Empleo</string>
+    <string name="cdma_bc_sms_enable" >Cdma Broadcast SMS activo</string>
+    <string name="retail_directory_enable" >Retail Directory habilitado</string>
+    <string name="cdma_broadcast_messages" >Mensajes de Cdma Broadcast</string>
+    <string name="national_enable" >Noticias nacionales habilitado</string>
+    <string name="emergency_broadcast_disable" >Emisión de emergencias deshabilitado</string>
+    <string name="list_language_summary" >Seleccione un idioma de noticias</string>
+    <string name="progress_mms" >Mensaje: MMS en curso..</string>
+    <string name="enable_disable_local_weather" >El tiempo local</string>
+    <string name="lafs_disable" >Horarios de vuelo del aeropuerto local desactivado</string>
+    <string name="unknown_broadcast_disable" >Emisiones desconocidas deshabilitadas</string>
+    <string name="pending_mms_text" >Toque para cambiar la subscripción</string>
+    <string name="technology_news_enable" >Noticias de tecnología habilitado</string>
+    <string name="stock_quotes_disable" >noticias de acciones desactivadas</string>
+    <string name="stock_quotes_enable" >noticias de valores habilitada</string>
+    <string name="bf_news_settings" >Noticias Financieras y de Negocios</string>
+    <string name="entertainment_news_settings" >Noticias de entretenimiento</string>
+    <string name="list_language_dtitle" >Idiomas</string>
+    <string name="enable_disable_national" >Nacional</string>
+    <string name="administrative_enable" >Habilitado administrativo</string>
+    <string name="enable_disable_advertisements" >Anuncios</string>
+    <string name="enable_disable_multi_category" >Multi-categoría</string>
+    <string name="enable_disable_technology_news" >Noticias de tecnología</string>
+    <string name="enable_disable_restaurants" >Restaurantes</string>
+    <string name="atr_enable" >Informes área de tráfico habilitado</string>
+    <string name="retail_directory_disable" >Retail Directory inactivo</string>
+    <string name="enable_disable_maintenance" >Mantenimiento</string>
+    <string name="enable_disable_atr" >Informes de área de tráfico</string>
+    <string name="maintenance_enable" >Mantenimiento habilitado</string>
+    <string name="enable_disable_lafs" >Horarios de vuelos del aeropuerto local</string>
+    <string name="national_disable" >Noticias nacionales desactivado</string>
+    <string name="mms2" >MMS2</string>
+    <string name="mms1" >MMS1</string>
+    <string name="enable_disable_retail_directory" >Directorio de Retail</string>
+    <string name="abort_mms_text " >Toque para abortar y volver</string>
+    <string name="advertisements_disable" >Anuncios Desactivados</string>
+    <string name="select_subscription_title" >Seleccione Subscripción</string>
+    <string name="mhh_disable" >Medicina, Salud, y hospital desactivado</string>
+    <string name="lodgings_disable" >Alojamientos desactivados</string>
+    <string name="local_weather_enable" >Tiempo local habilitado</string>
+    <string name="maintenance_disable" >Mantenimiento desactivado</string>
+    <string name="administrative_disable" >Administrativos desactivados</string>
+    <string name="local_enable" >Noticias locales habilitadas</string>
+    <string name="regional_enable" >Noticias regionales habilitado</string>
+    <string name="subscription2_title" >Suscripción 2</string>
+    <string name="local_weather_disable" >Tiempo local desactivado</string>
+    <string name="mhh_enable" >Medicina, Salud, y hospital activado</string>
+    <string name="restaurants_disable" >restaurantes activados</string>
+    <string name="multi_category_enable" >Multi-categoría activada</string>
+    <string name="general_news_settings" >Noticias Generales</string>
+    <string name="international_disable" >Noticias internacionales desactivadas</string>
+    <string name="technology_news_disable" >Noticias de Tecnología desactivadas</string>
+    <string name="enable_disable_emergency_broadcast" >Transmisión de emergencia</string>
+    <string name="enable_disable_stock_quotes" >Cotizaciones de Acciones</string>
+    <string name="lodgings_enable" >Alojamientos activados</string>
+    <string name="atr_disable" >Informes área de Tráfico desactivado</string>
+    <string name="enable_disable_unknown_broadcast" >Categoría de transmisión desconocido</string>
+    <string name="cdma_bc_sms_disable" >Transmisión CDMA SMS desactivado</string>
+    <string name="multi_category_disable" >Multi-categoría desactivada</string>
+    <string name="regional_disable" >Noticias regionales desactivadas</string>
+    <string name="international_enable" >Noticias internacionales activadas</string>
+    <string name="sports_news_settings" >Noticias Deportivas</string>
+    <string name="lafs_enable" >Horarios de vuelo del aeropuerto local habilitado</string>
+    <string name="unknown_broadcast_enable" >Transmissión Desconocida habilitada</string>
+    <string name="enable_disable_regional" >Regional</string>
+    <string name="progress_mms_title" >Transacción MMS en el otros sub en curso</string>
+    <string name="eo_enable" >Oportunidades de Empleo habilitado</string>
+    <string name="enable_disable_cdma_bc_sms" >Transmissión SMS CDMA</string>
+    <string name="enable_disable_local" >Local</string>
+    <string name="list_language_title" >idioma</string>
+    <string name="progress_mms_text " >Toque para intentar de nuevo</string>
+    <string name="enable_disable_administrative" >Administrativo</string>
+    <string name="local_disable" >Noticias locales desactivadas</string>
+    <string name="cdma_bc_sms_settings" >Configuración de transmisión SMS CDMA</string>
+    <string name="emergency_broadcast_enable" >Emisión de emergencia activado</string>
+    <string name="advertisements_enable" >anuncios habilitados</string>
+    <string-array name="list_language_entries" >
+        <item>"Inglés"</item>
+        <item>"francés"</item>
+        <item>"español"</item>
+        <item>"japonés"</item>
+        <item>"coreano"</item>
+        <item>"chino"</item>
+        <item>"hebreo"</item>
+    </string-array>
 </resources>
