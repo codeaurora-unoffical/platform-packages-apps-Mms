@@ -16,6 +16,7 @@
 
 package com.android.mms;
 
+import com.android.mms.ui.MessagingPreferenceActivity;
 import java.io.IOException;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -24,7 +25,9 @@ import org.xmlpull.v1.XmlPullParserException;
 import com.android.internal.telephony.TelephonyProperties;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.XmlResourceParser;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class MmsConfig {
@@ -81,6 +84,7 @@ public class MmsConfig {
     private static boolean mEnableSMSDeliveryReports = true;    // key: "enableSMSDeliveryReports"
     private static boolean mEnableMMSDeliveryReports = true;    // key: "enableMMSDeliveryReports"
     private static int mMaxTextLength = -1;
+    private static Context mContext;
 
     // This is the max amount of storage multiplied by mMaxMessageSize that we
     // allow of unsent messages before blocking the user from sending any more
@@ -94,6 +98,7 @@ public class MmsConfig {
 
     private static int mMaxSubjectLength = 40;  // maximum number of characters allowed for mms
                                                 // subject
+    public static SharedPreferences sPreferences;
 
     public static void init(Context context) {
         if (LOCAL_LOGV) {
@@ -103,7 +108,15 @@ public class MmsConfig {
         Log.v(TAG, "mnc/mcc: " +
                 android.os.SystemProperties.get(TelephonyProperties.PROPERTY_ICC_OPERATOR_NUMERIC));
 
+        mContext = context;
         loadMmsSettings(context);
+    }
+
+    public static SharedPreferences getPreferences() {
+        if (sPreferences == null) {
+            sPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        }
+        return sPreferences;
     }
 
     public static int getSmsToMmsTextThreshold() {
@@ -267,6 +280,11 @@ public class MmsConfig {
                    && type != parser.END_DOCUMENT) {
             ;
         }
+    }
+
+    public static boolean isRestrictedMode() {
+        return getPreferences().getBoolean(
+                    MessagingPreferenceActivity.RESTRICTED_MODE, false);
     }
 
     private static void loadMmsSettings(Context context) {

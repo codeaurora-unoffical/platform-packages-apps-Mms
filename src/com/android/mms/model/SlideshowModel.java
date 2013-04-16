@@ -27,6 +27,7 @@ import com.android.mms.dom.smil.parser.SmilXmlSerializer;
 import com.android.mms.layout.LayoutManager;
 import com.google.android.mms.ContentType;
 import com.google.android.mms.MmsException;
+import com.google.android.mms.pdu.CharacterSets;
 import com.google.android.mms.pdu.GenericPdu;
 import com.google.android.mms.pdu.MultimediaMessagePdu;
 import com.google.android.mms.pdu.PduBody;
@@ -53,6 +54,7 @@ import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -281,7 +283,16 @@ public class SlideshowModel extends Model
                 }
 
                 if (media.isText()) {
-                    part.setData(((TextModel) media).getText().getBytes());
+                    if (part.getCharset() != 0) {
+                        try {
+                            part.setData(((TextModel) media).getText()
+                                .getBytes(CharacterSets.getMimeName(part.getCharset())));
+                        } catch (UnsupportedEncodingException e) {
+                            Log.e(TAG, "Unsupported encoding.", e);
+                        }
+                    } else {
+                        part.setData(((TextModel) media).getText().getBytes());
+                    };
                 } else if (media.isImage() || media.isVideo() || media.isAudio()) {
                     part.setDataUri(media.getUri());
                 } else {
@@ -659,11 +670,13 @@ public class SlideshowModel extends Model
             }
             long messageId = ContentUris.parseId(messageUri);
             int bytesPerMediaItem = remainingSize / resizableCnt;
-            // Resize the resizable media items to fit within their byte limit.
-            for (SlideModel slide : mSlides) {
-                for (MediaModel media : slide) {
-                    if (media.getMediaResizable()) {
-                        media.resizeMedia(bytesPerMediaItem, messageId);
+            if (!MmsConfig.isRestrictedMode()) {
+                // Resize the resizable media items to fit within their byte limit.
+                for (SlideModel slide : mSlides) {
+                    for (MediaModel media : slide) {
+                        if (media.getMediaResizable()) {
+                            media.resizeMedia(bytesPerMediaItem, messageId);
+                        }
                     }
                 }
             }

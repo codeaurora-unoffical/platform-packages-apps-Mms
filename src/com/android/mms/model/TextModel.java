@@ -67,7 +67,7 @@ public class TextModel extends RegionMediaModel {
                 return new String(data); // system default encoding.
             }
         }
-        return "";
+        return " ";
     }
 
     public String getText() {

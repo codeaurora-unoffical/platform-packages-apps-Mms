@@ -18,6 +18,7 @@
 package com.android.mms.model;
 
 import com.android.mms.ContentRestrictionException;
+import com.android.mms.MmsConfig;
 import com.android.mms.dom.smil.SmilParElementImpl;
 import com.google.android.mms.ContentType;
 
@@ -537,7 +538,7 @@ public class SlideModel extends Model implements List<MediaModel>, EventListener
             return;
         }
 
-        if ((duration > mDuration)
+        if ((duration > mDuration && !MmsConfig.isRestrictedMode())
                 || (mDuration == DEFAULT_SLIDE_DURATION)) {
             mDuration = duration;
         }
