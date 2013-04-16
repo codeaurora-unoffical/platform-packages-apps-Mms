@@ -164,7 +164,6 @@ public class MmsMessageSender implements MessageSender {
     public static void sendReadRec(Context context, String to, String messageId, int status) {
         EncodedStringValue[] sender = new EncodedStringValue[1];
         sender[0] = new EncodedStringValue(to);
-
         try {
             final ReadRecInd readRec = new ReadRecInd(
                     new EncodedStringValue(PduHeaders.FROM_INSERT_ADDRESS_TOKEN_STR.getBytes()),

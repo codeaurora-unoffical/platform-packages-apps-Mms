@@ -57,6 +57,10 @@ import android.util.Log;
 import android.telephony.TelephonyManager;
 import android.telephony.MSimTelephonyManager;
 
+// add read report and delivery report notify support
+import com.google.android.mms.pdu.EncodedStringValue;
+import com.android.mms.R;
+
 
 /**
  * Receives Intent.WAP_PUSH_RECEIVED_ACTION intents and starts the
@@ -138,8 +142,36 @@ public class PushReceiver extends BroadcastReceiver {
 
             try {
                 switch (type) {
-                    case MESSAGE_TYPE_DELIVERY_IND:
+                    case MESSAGE_TYPE_DELIVERY_IND: {
+                        // add read report and delivery report notify support
+                        Log.d(TAG, "MESSAGE_TYPE_DELIVERY_IND");
+                        EncodedStringValue[] deliveryData= ((DeliveryInd)pdu).getTo();
+                        String address = deliveryData[0].getString();
+                        final String mmsDeliveryReportMsg =
+                                String.format(mContext.getString(R.string.delivery_toast_body),address);
+                        MessagingNotification.notifyUserOfMMSDeliveryReport(mContext, address);
+                        threadId = findThreadId(mContext, pdu, type);
+                        if (threadId == -1) {
+                            // The associated SendReq isn't found, therefore skip
+                            // processing this PDU.
+                            break;
+                        }
+                        Uri uri = p.persist(pdu, Inbox.CONTENT_URI);
+                        // Update thread ID for ReadOrigInd & DeliveryInd.
+                        ContentValues values = new ContentValues(1);
+                        values.put(Mms.THREAD_ID, threadId);
+                        SqliteWrapper.update(mContext, cr, uri, values, null, null);
+                        break;
+                    }
+
                     case MESSAGE_TYPE_READ_ORIG_IND: {
+                        EncodedStringValue readOrigData= ((ReadOrigInd)pdu).getFrom();
+                        String phNum = readOrigData.getString();
+
+                        //if(matchOperator()){
+                        MessagingNotification.notifyUserOfMMSReadReport(mContext, phNum);
+                        //}
+
                         threadId = findThreadId(mContext, pdu, type);
                         if (threadId == -1) {
                             // The associated SendReq isn't found, therefore skip

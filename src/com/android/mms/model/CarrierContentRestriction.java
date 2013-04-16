@@ -33,13 +33,46 @@ public class CarrierContentRestriction implements ContentRestriction {
     private static final ArrayList<String> sSupportedImageTypes;
     private static final ArrayList<String> sSupportedAudioTypes;
     private static final ArrayList<String> sSupportedVideoTypes;
+
+    private static final ArrayList<String> sRestrictedImageTypes = new ArrayList<String>();
+    private static final ArrayList<String> sRestrictedAudioTypes = new ArrayList<String>();
+    private static final ArrayList<String> sRestrictedVideoTypes = new ArrayList<String>();
+
     private static final boolean DEBUG = true;
 
     static {
         sSupportedImageTypes = ContentType.getImageTypes();
         sSupportedAudioTypes = ContentType.getAudioTypes();
         sSupportedVideoTypes = ContentType.getVideoTypes();
-    }
+        sSupportedImageTypes.add("image/x-ms-bmp");
+        sSupportedAudioTypes.add("audio/amr-wb");
+        sSupportedAudioTypes.add("audio/mobile-xmf");
+        sSupportedAudioTypes.add("audio/qcp");
+        sSupportedAudioTypes.add("audio/wav");
+        sSupportedAudioTypes.add("audio/x-wav");
+        sSupportedAudioTypes.add("audio/ogg");
+        sSupportedAudioTypes.add("audio/mp4");
+
+        // TODO:  Shall we move this code to ContentType?
+        // Image types for Restricted Mode.
+        sRestrictedImageTypes.add(ContentType.IMAGE_JPEG);
+        sRestrictedImageTypes.add(ContentType.IMAGE_JPG);
+        sRestrictedImageTypes.add(ContentType.IMAGE_GIF);
+        sRestrictedImageTypes.add(ContentType.IMAGE_WBMP);
+
+        // Audio types for Restricted Mode.
+        sRestrictedAudioTypes.add(ContentType.AUDIO_AMR);
+        sRestrictedAudioTypes.add(ContentType.AUDIO_MID);
+        sRestrictedAudioTypes.add(ContentType.AUDIO_MIDI);
+        sRestrictedAudioTypes.add(ContentType.AUDIO_X_MID);
+        sRestrictedAudioTypes.add(ContentType.AUDIO_X_MIDI);
+        sRestrictedAudioTypes.add(ContentType.AUDIO_3GPP);
+
+        // Video types for Restricted Mode.
+        sRestrictedVideoTypes.add(ContentType.VIDEO_3GPP);
+        sRestrictedVideoTypes.add(ContentType.VIDEO_3G2);
+        sRestrictedVideoTypes.add(ContentType.VIDEO_H263);
+        }
 
     public CarrierContentRestriction() {
     }
@@ -74,9 +107,16 @@ public class CarrierContentRestriction implements ContentRestriction {
             throw new ContentRestrictionException("Null content type to be check");
         }
 
-        if (!sSupportedImageTypes.contains(contentType)) {
-            throw new UnsupportContentTypeException("Unsupported image content type : "
-                    + contentType);
+        if (MmsConfig.isRestrictedMode()) { // Restricted mode
+            if (!sRestrictedImageTypes.contains(contentType)) {
+                throw new UnsupportContentTypeException("Unsupported restricted image content type : "
+                        + contentType);
+            }
+        } else {
+            if (!sSupportedImageTypes.contains(contentType)) {
+                throw new UnsupportContentTypeException("Unsupported image content type : "
+                        + contentType);
+            }
         }
     }
 
@@ -86,9 +126,16 @@ public class CarrierContentRestriction implements ContentRestriction {
             throw new ContentRestrictionException("Null content type to be check");
         }
 
-        if (!sSupportedAudioTypes.contains(contentType)) {
-            throw new UnsupportContentTypeException("Unsupported audio content type : "
-                    + contentType);
+        if (MmsConfig.isRestrictedMode()) { // Restricted mode
+            if (!sRestrictedAudioTypes.contains(contentType)) {
+                throw new UnsupportContentTypeException("Unsupported restricted audio content type : "
+                        + contentType);
+            }
+        } else {
+            if (!sSupportedAudioTypes.contains(contentType)) {
+                throw new UnsupportContentTypeException("Unsupported audio content type : "
+                        + contentType);
+            }
         }
     }
 
@@ -98,9 +145,16 @@ public class CarrierContentRestriction implements ContentRestriction {
             throw new ContentRestrictionException("Null content type to be check");
         }
 
-        if (!sSupportedVideoTypes.contains(contentType)) {
-            throw new UnsupportContentTypeException("Unsupported video content type : "
-                    + contentType);
+        if (MmsConfig.isRestrictedMode()) { // Restricted mode
+            if (!sRestrictedVideoTypes.contains(contentType)) {
+                throw new UnsupportContentTypeException("Unsupported restricted video content type : "
+                        + contentType);
+            }
+        } else {
+            if (!sSupportedVideoTypes.contains(contentType)) {
+                throw new UnsupportContentTypeException("Unsupported video content type : "
+                        + contentType);
+            }
         }
     }
 }

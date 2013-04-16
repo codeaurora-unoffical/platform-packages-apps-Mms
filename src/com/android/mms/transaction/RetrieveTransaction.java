@@ -137,7 +137,6 @@ public class RetrieveTransaction extends Transaction implements Runnable {
 
             // Send GET request to MMSC and retrieve the response data.
             byte[] resp = getPdu(mContentLocation);
-
             // Parse M-Retrieve.conf
             RetrieveConf retrieveConf = (RetrieveConf) new PduParser(resp).parse();
             if (null == retrieveConf) {

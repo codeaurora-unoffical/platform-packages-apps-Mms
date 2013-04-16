@@ -99,6 +99,11 @@ public class MessagingNotification {
     private static final int NOTIFICATION_ID = 123;
     public static final int MESSAGE_FAILED_NOTIFICATION_ID = 789;
     public static final int DOWNLOAD_FAILED_NOTIFICATION_ID = 531;
+
+    // add read report and delivery report notify support
+    public static final int MMS_READ_REPORT_NOTIFICATION_ID = 277;
+    public static final int MMS_DELIVERY_REPORT_NOTIFICATION_ID = 278;
+
     /**
      * This is the volume at which to play the in-conversation notification sound,
      * expressed as a fraction of the system notification volume.
@@ -314,6 +319,49 @@ public class MessagingNotification {
         nonBlockingUpdateSendFailedNotification(context);
         updateDownloadFailedNotification(context);
         MmsWidgetProvider.notifyDatasetChanged(context);
+    }
+
+    // add read report and delivery report notify support
+    public static void notifyUserOfMMSDeliveryReport(Context context,String msgAddress){
+        Log.d(TAG,"notifyUserOfMMSDeliveryReport");
+        Intent notifyIntent = new Intent();
+        notifyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        PendingIntent appIntent = PendingIntent.getActivity(context,0,notifyIntent,0);
+        NotificationManager nm = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
+        Notification mmsDelNotify = new Notification();
+
+        mmsDelNotify.icon = R.drawable.stat_notify_sms_failed;
+        mmsDelNotify.tickerText = "You got MMS Delivery Report ! ";
+        mmsDelNotify.defaults = Notification.DEFAULT_SOUND;
+        mmsDelNotify.setLatestEventInfo(context,
+               "You got MMS Delivery Report ! ",msgAddress, appIntent);
+        mmsDelNotify.flags |= Notification.FLAG_AUTO_CANCEL
+                | Notification.FLAG_SHOW_LIGHTS;
+
+        nm.notify(MMS_DELIVERY_REPORT_NOTIFICATION_ID , mmsDelNotify);
+    }
+
+
+    public static void notifyUserOfMMSReadReport(Context context,String msgAddress){
+        Log.d(TAG,"notifyUserOfMMSReadReport");
+        Intent notifyIntent = new Intent();
+        notifyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        PendingIntent appIntent = PendingIntent.getActivity(context,0,notifyIntent,0);
+        NotificationManager nm = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
+        Notification mmsReadNotify = new Notification();
+
+        mmsReadNotify.icon = R.drawable.stat_notify_sms;
+        mmsReadNotify.tickerText = "Your MMS has been Read!";
+        mmsReadNotify.defaults = Notification.DEFAULT_SOUND;
+        mmsReadNotify.setLatestEventInfo(context,
+                "Your MMS has been Read!",msgAddress, appIntent);
+
+        mmsReadNotify.flags |= Notification.FLAG_AUTO_CANCEL
+                | Notification.FLAG_SHOW_LIGHTS;
+
+        nm.notify(MMS_READ_REPORT_NOTIFICATION_ID , mmsReadNotify);
     }
 
     private static final class MmsSmsDeliveryInfo {

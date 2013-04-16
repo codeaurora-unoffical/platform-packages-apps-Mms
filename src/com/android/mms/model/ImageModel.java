@@ -136,6 +136,9 @@ public class ImageModel extends RegionMediaModel {
     protected void checkContentRestriction() throws ContentRestrictionException {
         ContentRestriction cr = ContentRestrictionFactory.getContentRestriction();
         cr.checkImageContentType(mContentType);
+        if (MmsConfig.isRestrictedMode()) {
+            cr.checkResolution(mWidth, mHeight);
+        }
     }
 
     public ItemLoadedFuture loadThumbnailBitmap(ItemLoadedCallback callback) {

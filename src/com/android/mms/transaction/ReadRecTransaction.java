@@ -42,10 +42,10 @@ import java.io.IOException;
  * <li>Notifies the TransactionService about succesful completion.
  * </ul>
  */
-public class ReadRecTransaction extends Transaction {
+public class ReadRecTransaction extends Transaction implements Runnable {
     private static final String TAG = "ReadRecTransaction";
     private static final boolean DEBUG = false;
-    private static final boolean LOCAL_LOGV = false;
+    private static final boolean LOCAL_LOGV = true;
 
     private final Uri mReadReportURI;
 
@@ -67,8 +67,17 @@ public class ReadRecTransaction extends Transaction {
      */
     @Override
     public void process() {
-        PduPersister persister = PduPersister.getPduPersister(mContext);
+        new Thread(this).start();
+    }
 
+    @Override
+    public int getType() {
+        return READREC_TRANSACTION;
+    }
+
+    @Override
+    public void run() {
+        PduPersister persister = PduPersister.getPduPersister(mContext);
         try {
             // Load M-read-rec.ind from outbox
             ReadRecInd readRecInd = (ReadRecInd) persister.load(mReadReportURI);
@@ -105,8 +114,4 @@ public class ReadRecTransaction extends Transaction {
         }
     }
 
-    @Override
-    public int getType() {
-        return READREC_TRANSACTION;
-    }
 }

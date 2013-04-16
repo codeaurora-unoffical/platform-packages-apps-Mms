@@ -147,6 +147,8 @@ import com.android.mms.util.AddressUtils;
 import com.android.mms.util.PhoneNumberFormatter;
 import com.android.mms.util.SendingProgressTokenManager;
 import com.android.mms.util.SmileyParser;
+// add read report and delivery report notify support
+import com.google.android.mms.pdu.PduHeaders;
 
 import android.text.InputFilter.LengthFilter;
 
@@ -3778,6 +3780,16 @@ public class ComposeMessageActivity extends Activity
 
     private void checkPendingNotification() {
         if (mPossiblePendingNotification && hasWindowFocus()) {
+            if (mConversation.getThreadId() > 0) {
+                // send read report if we have any unread mms.
+                ArrayList<Long> threadIds = null;
+                if (mConversation.getThreadId() != -1) {
+                    threadIds = new ArrayList<Long>();
+                    threadIds.add(mConversation.getThreadId());
+                }
+                MessageUtils.handleReadReport(this, threadIds,
+                    PduHeaders.READ_STATUS_READ, null);
+            }
             mConversation.markAsRead();
             mPossiblePendingNotification = false;
         }

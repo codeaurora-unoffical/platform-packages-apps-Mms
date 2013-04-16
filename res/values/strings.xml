@@ -920,5 +920,10 @@
     <string name="progress_mms">Messaging: MMS in progress...</string>
     <string name="progress_mms_text ">Touch to retry again</string>
 
+    <!-- Settings item for boolean option to MMS restricted mode -->
+    <string name="pref_title_mms_restricted_mode">Restricted Mode</string>
+    <!-- Settings item description for boolean MMS restricted mode option -->
+    <string name="pref_summary_mms_restricted_mode">Disable image Resizing and check image resolution</string>
+
 </resources>
 
