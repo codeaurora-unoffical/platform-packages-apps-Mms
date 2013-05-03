@@ -118,6 +118,7 @@ import android.widget.Toast;
 
 import com.android.internal.telephony.TelephonyIntents;
 import com.android.internal.telephony.TelephonyProperties;
+import com.android.mms.ContentRestrictionException;
 import com.android.mms.LogTag;
 import com.android.mms.MmsApp;
 import com.android.mms.MmsConfig;
@@ -134,6 +135,7 @@ import com.google.android.mms.ContentType;
 import com.google.android.mms.pdu.EncodedStringValue;
 import com.google.android.mms.MmsException;
 import com.google.android.mms.pdu.PduBody;
+import com.google.android.mms.pdu.PduHeaders;
 import com.google.android.mms.pdu.PduPart;
 import com.google.android.mms.pdu.PduPersister;
 import com.google.android.mms.pdu.SendReq;
@@ -1166,7 +1168,24 @@ public class ComposeMessageActivity extends Activity
         clipboard.setPrimaryClip(ClipData.newPlainText(null, str));
     }
 
+    private boolean isValidForForward(MessageItem msgItem) {
+        try {
+            if (msgItem.mSlideshow != null) {
+                msgItem.mSlideshow.checkContentRestriction();
+            }
+        } catch (ContentRestrictionException e) {
+            return false;
+        }
+
+        return true;
+    }
+
+
     private void forwardMessage(final MessageItem msgItem) {
+       if (MmsConfig.isRestrictedMode() && !isValidForForward(msgItem)) {
+            Toast.makeText(this, R.string.cannot_forward_message, Toast.LENGTH_SHORT).show();
+            return;
+        }
         mTempThreadId = 0;
         // The user wants to forward the message. If the message is an mms message, we need to
         // persist the pdu to disk. This is done in a background task.
@@ -3033,8 +3052,8 @@ public class ComposeMessageActivity extends Activity
 
         int result = mWorkingMessage.setAttachment(WorkingMessage.IMAGE, uri, append);
 
-        if (result == WorkingMessage.IMAGE_TOO_LARGE ||
-            result == WorkingMessage.MESSAGE_SIZE_EXCEEDED) {
+        if ((result == WorkingMessage.IMAGE_TOO_LARGE ||
+            result == WorkingMessage.MESSAGE_SIZE_EXCEEDED) && !MmsConfig.isRestrictedMode()) {
             if (Log.isLoggable(LogTag.APP, Log.VERBOSE)) {
                 log("resize image " + uri);
             }

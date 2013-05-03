@@ -705,4 +705,11 @@ public class SlideshowModel extends Model
         }
     }
 
+    public void checkContentRestriction() throws ContentRestrictionException {
+        for (SlideModel slide : mSlides) {
+            for (MediaModel media : slide) {
+                media.checkContentRestriction();
+            }
+        }
+    }
 }
