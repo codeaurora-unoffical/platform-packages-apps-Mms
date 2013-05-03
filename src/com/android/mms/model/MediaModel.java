@@ -30,6 +30,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 
+import com.android.mms.ContentRestrictionException;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -303,5 +304,7 @@ public abstract class MediaModel extends Model implements EventListener {
      * @throws MmsException
      */
     protected void resizeMedia(int byteLimit, long messageId) throws MmsException {
+    }
+    protected void checkContentRestriction() throws ContentRestrictionException {
     }
 }

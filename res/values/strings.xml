@@ -924,6 +924,7 @@
     <string name="pref_title_mms_restricted_mode">Restricted Mode</string>
     <!-- Settings item description for boolean MMS restricted mode option -->
     <string name="pref_summary_mms_restricted_mode">Disable image Resizing and check image resolution</string>
+    <string name="cannot_forward_message">Cannot forward message.</string>
 
 </resources>
 
