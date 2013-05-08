@@ -145,6 +145,7 @@ public class SlideshowModel extends Model
         int slidesNum = slideNodes.getLength();
         ArrayList<SlideModel> slides = new ArrayList<SlideModel>(slidesNum);
         int totalMessageSize = 0;
+        int index = 0;
 
         for (int i = 0; i < slidesNum; i++) {
             // FIXME: This is NOT compatible with the SMILDocument which is
@@ -159,8 +160,9 @@ public class SlideshowModel extends Model
             for (int j = 0; j < mediaNum; j++) {
                 SMILMediaElement sme = (SMILMediaElement) mediaNodes.item(j);
                 try {
+                    index++;
                     MediaModel media = MediaModelFactory.getMediaModel(
-                            context, sme, layouts, pb);
+                            context, sme, layouts, pb, index);
 
                     /*
                     * This is for slide duration value set.

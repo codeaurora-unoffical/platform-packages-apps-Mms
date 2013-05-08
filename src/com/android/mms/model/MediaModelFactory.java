@@ -41,11 +41,11 @@ public class MediaModelFactory {
     private static final String TAG = "Mms:media";
 
     public static MediaModel getMediaModel(Context context,
-            SMILMediaElement sme, LayoutModel layouts, PduBody pb)
+            SMILMediaElement sme, LayoutModel layouts, PduBody pb, int index)
             throws IOException, IllegalArgumentException, MmsException {
         String tag = sme.getTagName();
         String src = sme.getSrc();
-        PduPart part = findPart(pb, src);
+        PduPart part = findPart(pb, src, index);
 
         if (sme instanceof SMILRegionMediaElement) {
             return getRegionMediaModel(
@@ -56,7 +56,7 @@ public class MediaModelFactory {
         }
     }
 
-    private static PduPart findPart(PduBody pb, String src) {
+    private static PduPart findPart(PduBody pb, String src, int index) {
         PduPart part = null;
 
         if (src != null) {
@@ -76,6 +76,20 @@ public class MediaModelFactory {
 
         if (part != null) {
             return part;
+        }
+
+        // deal with some exception, couldn't get the right name for the part.
+        if (index < pb.getPartsNum()) {
+            part = pb.getPartByContentId("<" + src.substring(0, src.lastIndexOf(".")) + ">");
+            if (part != null && part.equals(pb.getPart(index))) {
+                return part;
+            } else {
+                part = pb.getPart(index);
+                if(part!=null){
+                  Log.d(TAG, "[MediaModelFactory] part still not hit, but also not null");
+                  return part;
+                }
+            }
         }
 
         throw new IllegalArgumentException("No part found for the model.");
