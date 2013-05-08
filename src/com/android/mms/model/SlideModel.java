@@ -54,6 +54,7 @@ public class SlideModel extends Model implements List<MediaModel>, EventListener
     private boolean mCanAddVideo = true;
 
     private int mDuration;
+    private boolean mDefaultDurationChanged;
     private boolean mVisible = true;
     private short mFill;
     private int mSlideSize;
@@ -65,6 +66,7 @@ public class SlideModel extends Model implements List<MediaModel>, EventListener
 
     public SlideModel(int duration, SlideshowModel slideshow) {
         mDuration = duration;
+        mDefaultDurationChanged = true;
         mParent = slideshow;
     }
 
@@ -80,6 +82,7 @@ public class SlideModel extends Model implements List<MediaModel>, EventListener
      */
     public SlideModel(int duration, ArrayList<MediaModel> mediaList) {
         mDuration = duration;
+        mDefaultDurationChanged = true;
 
         int maxDur = 0;
         for (MediaModel media : mediaList) {
@@ -91,7 +94,16 @@ public class SlideModel extends Model implements List<MediaModel>, EventListener
             }
         }
 
-        updateDuration(maxDur);
+        //updateDuration(maxDur);
+        // Since support set Duration function,so don't direct set maxDur.
+        updateDuration(getDuration(maxDur));
+    }
+
+    private int getDuration(int defaultVal) {
+       if (mDuration != defaultVal && mDuration > 0) {
+           return mDuration;
+       }
+       return defaultVal;
     }
 
     private void internalAdd(MediaModel media) throws IllegalStateException {
@@ -142,10 +154,15 @@ public class SlideModel extends Model implements List<MediaModel>, EventListener
     }
 
     private void internalAddOrReplace(MediaModel old, MediaModel media) {
-        // If the media is resizable, at this point consider it to be zero length.
-        // Just before we send the slideshow, we take the remaining space in the
-        // slideshow and equally allocate it to all the resizeable media items and resize them.
-        int addSize = media.getMediaResizable() ? 0 : media.getMediaSize();
+        int addSize;
+        if (MmsConfig.isRestrictedMode()) {
+            addSize = media.getMediaSize();
+        } else {
+            // If the media is resizable, at this point consider it to be zero length.
+            // Just before we send the slideshow, we take the remaining space in the
+            // slideshow and equally allocate it to all the resizeable media items and resize them.
+            addSize = media.getMediaResizable() ? 0 : media.getMediaSize();
+        }
         int removeSize;
         if (old == null) {
             if (null != mParent) {
@@ -155,7 +172,11 @@ public class SlideModel extends Model implements List<MediaModel>, EventListener
             increaseSlideSize(addSize);
             increaseMessageSize(addSize);
         } else {
-            removeSize = old.getMediaResizable() ? 0 : old.getMediaSize();
+            if (MmsConfig.isRestrictedMode()) {
+                removeSize = old.getMediaSize();
+            } else {
+                removeSize = old.getMediaResizable() ? 0 : old.getMediaSize();
+            }
             if (addSize > removeSize) {
                 if (null != mParent) {
                     mParent.checkMessageSize(addSize - removeSize);
@@ -190,11 +211,17 @@ public class SlideModel extends Model implements List<MediaModel>, EventListener
                 mCanAddImage = true;
                 mCanAddAudio = true;
             }
-            // If the media is resizable, at this point consider it to be zero length.
-            // Just before we send the slideshow, we take the remaining space in the
-            // slideshow and equally allocate it to all the resizeable media items and resize them.
-            int decreaseSize = ((MediaModel) object).getMediaResizable() ? 0
-                                        : ((MediaModel) object).getMediaSize();
+
+            int decreaseSize;
+            if (MmsConfig.isRestrictedMode()) {
+                decreaseSize = ((MediaModel) object).getMediaSize();
+            } else {
+                // If the media is resizable, at this point consider it to be zero length.
+                // Just before we send the slideshow, we take the remaining space in the
+                // slideshow and equally allocate it to all the resizeable media items and resize them.
+                decreaseSize = ((MediaModel) object).getMediaResizable() ? 0
+                                            : ((MediaModel) object).getMediaSize();
+            }
             decreaseSlideSize(decreaseSize);
             decreaseMessageSize(decreaseSize);
 
@@ -217,7 +244,14 @@ public class SlideModel extends Model implements List<MediaModel>, EventListener
      * @param duration the mDuration to set
      */
     public void setDuration(int duration) {
+        if (duration == DEFAULT_SLIDE_DURATION) {
+            // make the new duration is different from the default slide duration.
+            duration = duration + 1;
+        }
         mDuration = duration;
+        // When the length of video or audio which added to slide is
+        // less than duration, we will show the duration as the time.
+        mDefaultDurationChanged = true;
         notifyModelChanged(true);
     }
 
@@ -538,9 +572,11 @@ public class SlideModel extends Model implements List<MediaModel>, EventListener
             return;
         }
 
-        if ((duration > mDuration && !MmsConfig.isRestrictedMode())
-                || (mDuration == DEFAULT_SLIDE_DURATION)) {
-            mDuration = duration;
+        if (!MmsConfig.isRestrictedMode() || (mDuration == DEFAULT_SLIDE_DURATION)){
+            if (!mDefaultDurationChanged || (duration != mDuration)) {
+                mDuration = duration;
+            }
         }
+        mDefaultDurationChanged = false;
     }
 }
