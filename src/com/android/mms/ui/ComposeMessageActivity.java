@@ -2518,7 +2518,7 @@ public class ComposeMessageActivity extends Activity
     // recipient and it's a phone number.
     private boolean isRecipientCallable() {
         ContactList recipients = getRecipients();
-        return (recipients.size() == 1 && !recipients.containsEmail());
+        return false;//(recipients.size() == 1 && !recipients.containsEmail());
     }
 
     private void dialRecipient() {
