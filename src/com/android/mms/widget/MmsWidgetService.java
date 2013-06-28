@@ -57,6 +57,7 @@ import com.android.mms.util.SmileyParser;
 
 import java.util.Collection;
 import java.util.Map;
+import android.util.TypedValue;
 
 public class MmsWidgetService extends RemoteViewsService {
     private static final String TAG = "MmsWidgetService";
@@ -262,6 +263,7 @@ public class MmsWidgetService extends RemoteViewsService {
                         addColor(MessageUtils.formatTimeStampString(mContext, conv.getDate()),
                                 conv.hasUnreadMessages() ? SUBJECT_TEXT_COLOR_UNREAD :
                                     SUBJECT_TEXT_COLOR_READ));
+                remoteViews.setTextViewTextSize(R.id.date, TypedValue.COMPLEX_UNIT_PX, 12);
 
                 // From
                 int color = conv.hasUnreadMessages() ? SENDERS_TEXT_COLOR_UNREAD :
@@ -288,6 +290,7 @@ public class MmsWidgetService extends RemoteViewsService {
                 }
                 remoteViews.setTextViewText(R.id.from, from);
 
+                remoteViews.setTextViewTextSize(R.id.from, TypedValue.COMPLEX_UNIT_PX, 16);
                 // Subject
                 // TODO: the SmileyParser inserts image spans but they don't seem to make it
                 // into the remote view.
@@ -296,6 +299,7 @@ public class MmsWidgetService extends RemoteViewsService {
                         addColor(parser.addSmileySpans(conv.getSnippet()),
                                 conv.hasUnreadMessages() ? SUBJECT_TEXT_COLOR_UNREAD :
                                     SUBJECT_TEXT_COLOR_READ));
+                remoteViews.setTextViewTextSize(R.id.subject, TypedValue.COMPLEX_UNIT_PX, 12);
 
                 // On click intent.
                 Intent clickIntent = new Intent(Intent.ACTION_VIEW);
