@@ -85,6 +85,7 @@ import android.provider.ContactsContract.CommonDataKinds.Email;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.provider.ContactsContract.Contacts;
 import android.provider.ContactsContract.Intents;
+import android.provider.MediaStore.Audio;
 import android.provider.MediaStore.Images;
 import android.provider.MediaStore.Video;
 import android.provider.Settings;
@@ -3692,13 +3693,13 @@ public class ComposeMessageActivity extends Activity
                 } else if (Settings.System.DEFAULT_RINGTONE_URI.equals(uri)) {
                     break;
                 }
-                addAudio(uri);
+                addAudio(uri, false);
                 break;
             }
 
             case REQUEST_CODE_RECORD_SOUND:
                 if (data != null) {
-                    addAudio(data.getData());
+                    addAudio(data.getData(),false);
                 }
                 break;
 
@@ -4017,8 +4018,8 @@ public class ComposeMessageActivity extends Activity
         }
     }
 
-    private void addAudio(Uri uri) {
-        int result = mWorkingMessage.setAttachment(WorkingMessage.AUDIO, uri, false);
+    private void addAudio(Uri uri, boolean append) {
+        int result = mWorkingMessage.setAttachment(WorkingMessage.AUDIO, uri, append);
         handleAddAttachmentError(result, R.string.type_audio);
     }
 
@@ -4133,6 +4134,8 @@ public class ComposeMessageActivity extends Activity
         return MediaFile.isVideoFileType(fileType);
     }
 
+    // mAudioUri will look like this: content://media/external/audio/media
+    private static final String mAudioUri = Audio.Media.getContentUri("external").toString();
     // mVideoUri will look like this: content://media/external/video/media
     private static final String mVideoUri = Video.Media.getContentUri("external").toString();
     // mImageUri will look like this: content://media/external/images/media
@@ -4154,6 +4157,9 @@ public class ComposeMessageActivity extends Activity
                     || (wildcard && uri.toString().startsWith(mVideoUri))
                     || (wildcard && isVideoFile(uri))) {
                 addVideo(uri, append);
+            } else if (type.startsWith("audio/") ||
+                    (wildcard && uri.toString().startsWith(mAudioUri))) {
+                addAudio(uri, append);
             } else if (SystemProperties.getBoolean("persist.env.mms.vcard", true)
                     && (type.equals("text/x-vcard")
                     || (wildcard && isVcardFile(uri)))) {
