@@ -370,6 +370,10 @@ public class ComposeMessageActivity extends Activity
 
     private static final int DIALOG_IMPORT_TEMPLATE = 1;
     private static final int ALWAY_ASK = 2;
+
+    // Add a Uri for attach file.
+    private Uri mAttachFileUri;
+
     /**
      * Whether this activity is currently running (i.e. not paused)
      */
@@ -510,6 +514,7 @@ public class ComposeMessageActivity extends Activity
 
                 case AttachmentEditor.MSG_REMOVE_ATTACHMENT:
                     mWorkingMessage.removeAttachment(true);
+                    mAttachFileUri = null;
 
                     // if remove attachment, reset slideshow image
                     mAttachmentEditor.resetSlideshowImage();
@@ -2529,6 +2534,11 @@ public class ComposeMessageActivity extends Activity
             mRecipientsEditor.requestFocus();
         }
 
+        // If the bundle isn't null, get the data of attach file.
+        if (savedInstanceState != null) {
+            restoreAttachFile(savedInstanceState);
+        }
+
         mMsgListAdapter.setIsGroupConversation(mConversation.getRecipients().size() > 1);
     }
 
@@ -2768,6 +2778,12 @@ public class ComposeMessageActivity extends Activity
         super.onSaveInstanceState(outState);
 
         outState.putString(RECIPIENTS, getRecipients().serialize());
+
+        // If attchment is not null, store it's info in bundle.
+        if (mAttachFileUri != null && mWorkingMessage.hasAttachment()) {
+            outState.putString("attach_fille_uri", mAttachFileUri.toString());
+            outState.putInt("attach_fille_type", mWorkingMessage.getAttachmentType());
+        }
 
         mWorkingMessage.writeStateToBundle(outState);
 
@@ -3639,7 +3655,8 @@ public class ComposeMessageActivity extends Activity
         switch (requestCode) {
             case REQUEST_CODE_CREATE_SLIDESHOW:
                 if (data != null) {
-                    WorkingMessage newMessage = WorkingMessage.load(this, data.getData());
+                    mAttachFileUri = data.getData();
+                    WorkingMessage newMessage = WorkingMessage.load(this, mAttachFileUri);
                     if (newMessage != null) {
                         // Here we should keep the subject from the old mWorkingMessage.
                         setNewMessageSubject(newMessage);
@@ -3657,33 +3674,35 @@ public class ComposeMessageActivity extends Activity
                 // data directly from file (using UriImage) instead of decoding it into a Bitmap,
                 // which takes up too much memory and could easily lead to OOM.
                 File file = new File(TempFileProvider.getScrapPath(this));
-                Uri uri = Uri.fromFile(file);
+                mAttachFileUri = Uri.fromFile(file);
 
                 // Remove the old captured picture's thumbnail from the cache
-                MmsApp.getApplication().getThumbnailManager().removeThumbnail(uri);
+                MmsApp.getApplication().getThumbnailManager().removeThumbnail(mAttachFileUri);
 
-                addImageAsync(uri, false);
+                addImageAsync(mAttachFileUri, false);
                 break;
             }
 
             case REQUEST_CODE_ATTACH_IMAGE: {
                 if (data != null) {
-                    addImageAsync(data.getData(), false);
+                    mAttachFileUri = data.getData();
+                    addImageAsync(mAttachFileUri, false);
                 }
                 break;
             }
 
             case REQUEST_CODE_TAKE_VIDEO:
-                Uri videoUri = TempFileProvider.renameScrapFile(".3gp", null, this);
+                mAttachFileUri = TempFileProvider.renameScrapFile(".3gp", null, this);
                 // Remove the old captured video's thumbnail from the cache
-                MmsApp.getApplication().getThumbnailManager().removeThumbnail(videoUri);
+                MmsApp.getApplication().getThumbnailManager().removeThumbnail(mAttachFileUri);
 
-                addVideoAsync(videoUri, false);      // can handle null videoUri
+                addVideoAsync(mAttachFileUri, false);      // can handle null videoUri
                 break;
 
             case REQUEST_CODE_ATTACH_VIDEO:
                 if (data != null) {
-                    addVideoAsync(data.getData(), false);
+                    mAttachFileUri = data.getData();
+                    addVideoAsync(mAttachFileUri, false);
                 }
                 break;
 
@@ -3695,13 +3714,15 @@ public class ComposeMessageActivity extends Activity
                 } else if (Settings.System.DEFAULT_RINGTONE_URI.equals(uri)) {
                     break;
                 }
+                mAttachFileUri = uri;
                 addAudio(uri, false);
                 break;
             }
 
             case REQUEST_CODE_RECORD_SOUND:
                 if (data != null) {
-                    addAudio(data.getData(),false);
+                    mAttachFileUri = data.getData();
+                    addAudio(mAttachFileUri, false);
                 }
                 break;
 
@@ -3723,6 +3744,7 @@ public class ComposeMessageActivity extends Activity
                 // the attachment and then add the contact info to text.
                 if (data != null) {
                     mWorkingMessage.removeAttachment(true);
+                    mAttachFileUri = null;
                 }
             case REQUEST_CODE_ATTACH_ADD_CONTACT_INFO:
                 if (data != null) {
@@ -3739,6 +3761,7 @@ public class ComposeMessageActivity extends Activity
                     // remove the old attachement silently first.
                     if (mWorkingMessage != null) {
                         mWorkingMessage.removeAttachment(false);
+                        mAttachFileUri = null;
                     }
                     String extraVCard = data.getStringExtra(MultiPickContactsActivity.EXTRA_VCARD);
                     if (extraVCard != null) {
@@ -5308,5 +5331,51 @@ public class ComposeMessageActivity extends Activity
     private boolean isVcardFile(Uri uri) {
         String path = uri.getPath();
         return null != path && path.toLowerCase().endsWith(".vcf");
+    }
+
+    /**
+     * Get the Uri and type of attachFile from bundle,
+     * and restore the data of attachment.
+     */
+    private void restoreAttachFile(Bundle bundle) {
+        if (bundle != null) {
+            String strAttachFileUri = bundle.getString("attach_fille_uri");
+            if (strAttachFileUri != null) {
+                mAttachFileUri = Uri.parse(strAttachFileUri);
+                int nAttachFileType = bundle.getInt("attach_fille_type", WorkingMessage.TEXT);
+                if (mAttachFileUri != null) {
+                    switch(nAttachFileType) {
+                        case WorkingMessage.IMAGE:
+                            addImage(mAttachFileUri, false);
+                            break;
+                        case WorkingMessage.VIDEO:
+                            addVideo(mAttachFileUri, false);
+                            break;
+                        case WorkingMessage.AUDIO:
+                            addAudio(mAttachFileUri, false);
+                            break;
+                        case WorkingMessage.SLIDESHOW:
+                            WorkingMessage newMessage = WorkingMessage.load(this, mAttachFileUri);
+                            if (newMessage != null) {
+                                if (mWorkingMessage.hasSubject()) {
+                                    newMessage.setSubject(mWorkingMessage.getSubject(), false);
+                                }
+                                mWorkingMessage = newMessage;
+                                mWorkingMessage.setConversation(mConversation);
+                                updateThreadIdIfRunning();
+                                drawTopPanel(false);
+                                updateSendButtonState();
+                                invalidateOptionsMenu();
+                            }
+                            break;
+                        case WorkingMessage.VCARD:
+                            addVcard(mAttachFileUri);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+        }
     }
 }

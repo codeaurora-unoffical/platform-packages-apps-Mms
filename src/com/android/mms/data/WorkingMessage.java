@@ -678,6 +678,13 @@ public class WorkingMessage {
     }
 
     /**
+     * Returns message attachment type (including slideshows).
+     */
+    public int getAttachmentType() {
+        return mAttachmentType;
+    }
+
+    /**
      * Returns true if the message has an attachment (including slideshows).
      */
     public boolean hasAttachment() {
