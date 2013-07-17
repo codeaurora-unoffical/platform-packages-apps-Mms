@@ -368,6 +368,10 @@
     <string name="confirm_delete_all_conversations" >Todas as conversas serão excluídas.</string>
     <string name="open_keyboard_to_compose_message" >Abra o teclado para digitar a mensagem</string>
     <string name="remove_slide" >Remover slide</string>
+    <!-- Settings item for boolean option to MMS restricted mode -->
+    <string name="pref_title_mms_restricted_mode">Modo restrito</string>
+    <!-- Settings item description for boolean MMS restricted mode option -->
+    <string name="pref_summary_mms_restricted_mode">Desativar redimensionamento da imagem e conferir a resolução da imagem</string>
     <string-array name="select_dialog_items" >
         <item>"1 segundo"</item>
         <item>"2 segundos"</item>

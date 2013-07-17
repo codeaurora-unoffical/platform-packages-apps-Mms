@@ -343,4 +343,10 @@
     <string name="attachment_picture" msgid="3709286281567284296">"Imagem"</string>
     <string name="notification_separator" msgid="2334673105226536422">"  "</string>
     <string name="enumeration_comma" msgid="213598026698964628">", "</string>
+
+    <!-- Settings item for boolean option to MMS restricted mode -->
+    <string name="pref_title_mms_restricted_mode">Modo restrito</string>
+    <!-- Settings item description for boolean MMS restricted mode option -->
+    <string name="pref_summary_mms_restricted_mode">Desativar redimensionamento da imagem e conferir a resolução da imagem</string>
+
 </resources>
