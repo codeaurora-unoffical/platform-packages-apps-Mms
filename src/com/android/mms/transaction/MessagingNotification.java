@@ -332,10 +332,10 @@ public class MessagingNotification {
         Notification mmsDelNotify = new Notification();
 
         mmsDelNotify.icon = R.drawable.stat_notify_sms_failed;
-        mmsDelNotify.tickerText = "You got MMS Delivery Report ! ";
+        mmsDelNotify.tickerText = getResources().getString(R.string.report_mms);//"You got MMS Delivery Report ! ";
         mmsDelNotify.defaults = Notification.DEFAULT_SOUND;
         mmsDelNotify.setLatestEventInfo(context,
-               "You got MMS Delivery Report ! ",msgAddress, appIntent);
+               getResources().getString(R.string.report_mms),msgAddress, appIntent);
         mmsDelNotify.flags |= Notification.FLAG_AUTO_CANCEL
                 | Notification.FLAG_SHOW_LIGHTS;
 
@@ -353,10 +353,10 @@ public class MessagingNotification {
         Notification mmsReadNotify = new Notification();
 
         mmsReadNotify.icon = R.drawable.stat_notify_sms;
-        mmsReadNotify.tickerText = "Your MMS has been Read!";
+        mmsReadNotify.tickerText = getResources().getString(R.string.read_mms);//"Your MMS has been Read!";
         mmsReadNotify.defaults = Notification.DEFAULT_SOUND;
         mmsReadNotify.setLatestEventInfo(context,
-                "Your MMS has been Read!",msgAddress, appIntent);
+                getResources().getString(R.string.read_mms),msgAddress, appIntent);
 
         mmsReadNotify.flags |= Notification.FLAG_AUTO_CANCEL
                 | Notification.FLAG_SHOW_LIGHTS;

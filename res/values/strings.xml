@@ -925,6 +925,7 @@
     <!-- Settings item description for boolean MMS restricted mode option -->
     <string name="pref_summary_mms_restricted_mode">Disable image Resizing and check image resolution</string>
     <string name="cannot_forward_message">Cannot forward message.</string>
-
+    <string name="report_mms">You got MMS Delivery Report !</string>
+    <string name="read_mms">Your MMS has been Read!</string>
 </resources>
 

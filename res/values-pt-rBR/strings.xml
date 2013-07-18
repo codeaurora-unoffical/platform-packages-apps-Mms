@@ -425,4 +425,6 @@
         <!-- Case of 2 or more results. -->
         <item quantity="other">+<xliff:g id="number" example="15">%1$s</xliff:g> "outras mensagens"</item>
     </plurals>
+    <string name="report_mms">MMS entregue com sucesso!</string>
+    <string name="read_mms">Your MMS has been Read!</string>
 </resources>
