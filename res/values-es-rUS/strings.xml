@@ -428,6 +428,7 @@
     <string name="cdma_bc_sms_settings" >Configuración de transmisión SMS CDMA</string>
     <string name="emergency_broadcast_enable" >Emisión de emergencia activado</string>
     <string name="advertisements_enable" >anuncios habilitados</string>
+    <string name="pref_title_mms_restricted_mode">Modo Restringido</string>
     <string-array name="list_language_entries" >
         <item>"Inglés"</item>
         <item>"francés"</item>
