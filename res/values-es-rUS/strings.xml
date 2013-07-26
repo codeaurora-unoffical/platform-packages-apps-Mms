@@ -429,6 +429,7 @@
     <string name="emergency_broadcast_enable" >Emisión de emergencia activado</string>
     <string name="advertisements_enable" >anuncios habilitados</string>
     <string name="pref_title_mms_restricted_mode">Modo Restringido</string>
+    <string name="pref_summary_mms_restricted_mode" >Deshabilite el cambio de tamaño de la imagen y verifique la resolución de la imagen</string>
     <string-array name="list_language_entries" >
         <item>"Inglés"</item>
         <item>"francés"</item>
