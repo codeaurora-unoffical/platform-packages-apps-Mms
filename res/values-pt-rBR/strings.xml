@@ -225,7 +225,7 @@
     <string name="attach_image" >Imagens</string>
     <string name="priority_label" >Prioridade: </string>
     <string name="regional_enable" >noticias regionais habilitadas</string>
-    <string name="sent_label" >Enviados: </string>
+    <string name="sent_label" >Enviado: </string>
     <string name="message_count_notification" ><xliff:g id="NUMBER">%1$s</xliff:g> novas mensagens</string>
     <string name="edit" >Editar</string>
     <string name="status_label" >Status: </string>
