@@ -65,6 +65,8 @@ import android.telephony.MSimTelephonyManager;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * The TransactionService of the MMS Client is responsible for handling requests
@@ -377,7 +379,10 @@ public class TransactionService extends Service implements Observer {
 
     private void removeNotification(int startId) {
         Log.d(TAG, "removeNotification, startId=" + startId);
-        for (TxnRequest req : txnRequestsMap ) {
+        Iterator<TxnRequest> it = txnRequestsMap.iterator();
+        while (it.hasNext()) {
+        TxnRequest req = it.next();
+        //for (TxnRequest req : txnRequestsMap ) {
             if (req.serviceId == startId) {
                 if (req.requestedSubId == -1) {
                     Log.d(TAG, "Notification cleanup not required since subId is -1");
