@@ -518,7 +518,11 @@ public class TransactionService extends Service implements Observer {
 
     private void updateTxnRequestStatus(int servId, boolean status) {
         Log.d(TAG, "updateTxnRequestStatus servId="+servId);
-        for (TxnRequest req : txnRequestsMap ) {
+        Iterator<TxnRequest> it = txnRequestsMap.iterator();
+        while (it.hasNext()) {
+        TxnRequest req = it.next();
+        //for (TxnRequest req : txnRequestsMap ) {
+
             if (req.serviceId == servId) {
                 Log.d(TAG, "updateTxnRequestStatus txn="+req);
                 if (status == true) {
