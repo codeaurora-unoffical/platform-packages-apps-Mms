@@ -270,7 +270,7 @@ public class SlideshowActivity extends Activity implements EventListener {
                     SmilDocumentImpl.SMIL_DOCUMENT_END_EVENT, this, false);
         }
         if (mSmilPlayer != null) {
-            mSmilPlayer.pause();
+            mSmilPlayer.stop();
         }
     }
 
